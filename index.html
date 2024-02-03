@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title><style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    nav {
+        width: 100%;
+        height: 66px;
+        border: 0px 0px 1px 0px;
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 64px 16px 64px;
+    }
+    .left {
+        align-self: flex-start;
+    }
+    .right {
+        align-self: flex-end;
+    }
+    .thoughts {
+        width: 768px;
+        height: 600px;
+        padding: 184px, 32px, 0px, 32px;
+        gap: 16px;
+        background-color: #ECF8FF66;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .centered-textarea {
+        width: 100%;
+        height: 80%;
+        resize: none;
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    .textarea-container {
+        width: 521px;
+        height: 241px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    .postbtn button {
+        background-color: blue;
+        color: white;
+        border-radius: 40px;
+        height: 45px;
+        width: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .postbtn button:hover {
+        background-color: #0069d9;
+    }
+    h2 {
+        text-align: left;
+    }
+    .tweet-card {
+        width: 464px;
+        height: 196px;
+        border: 1px solid #ccc;
+        padding: 24px;
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 16px;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        margin: 16px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        animation: float 3s ease-in-out infinite;
+    }
+    .tweet-card .myphoto {
+        width: 56px;
+        height: 56px;
+        border-radius: 28px;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin-right: 16px;
+    }
+    .tweet-card img {
+        width: 100%;
+    }
+    .tweet-card .deleteit {
+        width: 24px;
+        height: 24px;
+        margin-top: 8px;
+    }
+    .tweet-card h2, .tweet-card h4 {
+        margin: 0;
+        margin-right: 8px;
+    }
+    .tweet-card .heart {
+        width: 24px;
+        height: 24px;
+        margin-top: 8px;
+    }
+    .tweet-card .editthis {
+        width: 24px;
+        height: 24px;
+        margin-top: 8px;
+        margin-left: auto;
+    }
+    .tweet-card p {
+        flex-grow: 1;
+        margin-right: 16px;
+    }
+    .tweet-card .hidden {
+        display: none;
+    }
+    </style>
+    </head>
+    <body>
+    <nav>
+        <div class="left"><img src="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/064/033/original/SST_Logo.png?1706888781" alt=""></div>
+        <div class="right"><img src="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/064/032/original/scaler-social.png?1706888764" alt=""></div>
+    </nav>
+    <div class="thoughts">
+        <div class="textarea-container">
+            <textarea rows="4" cols="50" class="centered-textarea"></textarea>
+        </div>
+        <div class="postbtn">
+            <button>Post</button>
+        </div>
+    </div>
+    <div class="rightside">
+    </div>
+    <script>
+    const rightside = document.querySelector('.rightside')
+    const postBtn = document.querySelector('.postbtn button')
+    const textarea = document.querySelector('.centered-textarea')
+    
+    postBtn.addEventListener('click', function (event) {
+        event.preventDefault()
+        const postText = textarea.value
+        const newPost = document.createElement('div')
+        newPost.className = 'tweet-card'
+        newPost.innerHTML = `
+            <div class="myphoto"><img src="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/064/031/original/profile_image.png?1706888739" alt=""></div>
+            <div class="deleteit"><img src="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/064/027/original/delete.png?1706888643" alt=""></div>
+            <h2>Joanne Graham</h2> <h4>joannegraham123</h4>
+            <p>${postText}</p>
+            <div class="heart"><img src="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/064/029/original/heart.png?1706888679" alt="" class="regularheart"></div>
+        `
+        rightside.insertBefore(newPost, rightside.firstChild)
+        textarea.value = ''
+    
+        // Add event listener to delete button
+        const deleteBtn = newPost.querySelector('.deleteit')
+        deleteBtn.addEventListener('click', function () {
+            newPost.remove()
+        })
+    
+        // Add event listener to heart button
+        const heartBtn = newPost.querySelector('.regularheart')
+        heartBtn.addEventListener('click', function () {
+            heartBtn.classList.add('hidden')
+        })
+        heartBtn.addEventListener('mouseout', function () {
+            heartBtn.classList.remove('hidden')
+        })
+    
+        // Add event listener to edit button
+        const editBtn = document.createElement('div')
+        editBtn.className = 'editthis'
+        editBtn.innerHTML = `<img src="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/064/028/original/edit.png?1706888661" alt="">`
+        newPost.insertBefore(editBtn, newPost.querySelector('.heart'))
+        editBtn.addEventListener('click', function () {
+            const tweetText = newPost.querySelector('p')
+            const newText = prompt('Enter new tweet text:')
+            if (newText) {
+                tweetText.textContent = newText
+            }
+        })
+    
+        // Show the tweet card
+        newPost.style.display = 'block'
+    })
+    </script>
+    </body></html>
